@@ -1,3 +1,3 @@
 # todo_list
 
-A new Flutter project.
+simple to do list app with flutter
