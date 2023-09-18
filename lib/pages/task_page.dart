@@ -1,8 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/constants/colors.dart';
+import 'package:intl/intl.dart';
+import 'package:todo_list/pages/add_task_page.dart';
 import 'package:todo_list/resources/task.dart';
 
-class TaskPage extends StatelessWidget {
+class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
+
+  @override
+  State<TaskPage> createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPage> {
+  void _refreshTaskList() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +37,19 @@ class TaskPage extends StatelessWidget {
                 onPressed: () {},
               ),
             ]),
-        backgroundColor: const Color.fromARGB(255, 108, 142, 253),
+        backgroundColor: primaryColor,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.only(bottom: 30.0, top: 100.0, left: 40.0),
+              padding: EdgeInsets.only(bottom: 30.0, top: 80.0, left: 40.0),
               child: CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.white,
                 child: Icon(
                   Icons.list,
                   size: 50,
-                  color: Color.fromARGB(255, 108, 142, 253),
+                  color: primaryColor,
                 ),
               ),
             ),
@@ -52,19 +64,19 @@ class TaskPage extends StatelessWidget {
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 40.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 40.0),
               child: Text(
-                "23 Tasks",
-                style: TextStyle(
+                '${tasks.length} Tasks',
+                style: const TextStyle(
                   fontSize: 25,
                   color: Colors.white70,
                 ),
               ),
             ),
             Container(
-              height: 80,
-              color: const Color.fromARGB(255, 108, 142, 253),
+              height: 40,
+              color: primaryColor,
             ),
             Expanded(
               child: Container(
@@ -75,9 +87,75 @@ class TaskPage extends StatelessWidget {
                     topRight: Radius.circular(30),
                   ),
                 ),
+                child: ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DateTime currentDate = DateTime.now();
+                    String day = DateFormat('EEEE').format(currentDate);
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Text(
+                                day,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: textSubsColor,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              child: Text(
+                                tasks[index].title,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: tasks[index].isDone
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none),
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Text(
+                          tasks[index].description,
+                          style: const TextStyle(
+                            fontSize: 15,
+                          ),
+                        ),
+                        trailing: Checkbox(
+                          value: tasks[index].isDone,
+                          onChanged: (value) {
+                            setState(() {
+                              tasks[index].isDone = value!;
+                            });
+                          },
+                          activeColor: primaryColor,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            // Navigasi ke halaman AddTaskPage jika tombol "+" ditekan
+            final result = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const AddTaskPage(),
+            ));
+            if (result == true) {
+              _refreshTaskList();
+            }
+          },
+          backgroundColor: primaryColor,
+          child: const Icon(Icons.add),
         ));
   }
 }

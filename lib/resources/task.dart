@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+class Task {
+  final String title;
+  final String description;
+  bool isDone;
+
+  Task({required this.title, required this.description, this.isDone = false});
+}
+
+List<Task> tasks = [];
+
 class Data {
   final List<IconData> icons = [
     Icons.list,
@@ -35,13 +45,13 @@ class Data {
   ];
 
   final List<String> subtitles = [
-    '23 Tasks',
-    '14 Tasks',
-    '4 Tasks',
-    '1 Tasks',
-    '2 Tasks',
-    '14 Tasks',
-    '5 Tasks',
-    '8 Tasks',
+    '${tasks.length} Tasks',
+    '0 Tasks',
+    '0 Tasks',
+    '0 Tasks',
+    '0 Tasks',
+    '0 Tasks',
+    '0 Tasks',
+    '0 Tasks',
   ];
 }
